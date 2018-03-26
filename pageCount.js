@@ -12,6 +12,9 @@ var pageCountFunc=function(url,callback){
 
 			var totalpages=$('div.pagination ul').children('li').eq(-2).text();
 			totalpages=parseInt(totalpages);
+			if(isNaN(totalpages)){
+				totalpages=1;
+			}
 			// console.log(url);
 			// console.log(totalpages);
 			callback(null,totalpages);

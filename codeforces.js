@@ -4,6 +4,7 @@ const cheerio=require('cheerio');
 
 const profile=require('./profile');
 const contests=require('./contests');
+const submissions=require('./submissions');
 
 
 const argv=yargs
@@ -19,15 +20,21 @@ const argv=yargs
 	.alias('help','h')
 	.argv;
 
-profile.profileFunc(argv.u,(err,profileData)=>{
-	if(err){
-		return console.log(err);
+profile.profileFunc(argv.u,(err1,profileData)=>{
+	if(err1){
+		return console.log(err1);
 	}
 	console.log(profileData);
-	contests.contestsFunc(argv.u,(err,contestsData)=>{
-		if(err){
-			return console.log(err);
+	contests.contestsFunc(argv.u,(err2,contestsData)=>{
+		if(err2){
+			return console.log(err2);
 		}
 		console.log(contestsData);
+		submissions.submissionsFunc(argv.u,(err3,submissionsData)=>{
+			if(err3){
+				return console.log(err3);
+			}
+			console.log(submissionsData);
+		});
 	});
 });

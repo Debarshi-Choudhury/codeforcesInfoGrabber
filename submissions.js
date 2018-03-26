@@ -1,21 +1,6 @@
-const yargs=require('yargs');
 const request=require('request');
 const cheerio=require('cheerio');
 const pageCount=require('./pageCount');
-
-const argv=yargs
-	.options({
-		username:{
-			demand:true,
-			describe:'codeforces username to fetch data for',
-			alias:'u',
-			string:true
-		}
-	})
-	.help()
-	.alias('help','h')
-	.argv;
-
 
 
 var submissionsFunc=function(usr,cb){
@@ -37,10 +22,10 @@ var submissionsFunc=function(usr,cb){
 	var compilation_error=0;
 
 	pageCount.pageCountFunc(url,function(error,pages){
-		console.log(pages);
 		if(error){
 			console.log(error);
 		}else{
+			console.log(pages);
 			var page_number= 1;
 			function callNext() {
 			   if (page_number>pages) {
@@ -94,13 +79,17 @@ var submissionsFunc=function(usr,cb){
 			   	});
 				}
 			}
+
+			//Here we will call the callNext function for the first time
 			callNext();
 
+
 			function requestEnded(){
-			    console.log("Yay Request ended");
+			    // console.log("All Request's have ended");
+				 uniq_ques=Object.keys(uniq_ques);
 				 var submissionsData={
 			 		uniq_ques,
-			 		no_of_uniq_ques,
+			 		no_of_uniq_ques:uniq_ques.length,
 			 		accepted,
 			 		wrong_answer,
 			 		time_lim_exceed,
@@ -117,13 +106,14 @@ var submissionsFunc=function(usr,cb){
 
 }
 
-submissionsFunc(argv.u,(err,submissionsData)=>{
-	if(err){
-		return console.log(err);
-	}
-	console.log(submissionsData);
-});
-
 module.exports={
 	submissionsFunc
 }
+
+// //for testing purpose
+// submissionsFunc(argv.u,(err,submissionsData)=>{
+// 	if(err){
+// 		return console.log(err);
+// 	}
+// 	console.log(submissionsData);
+// });
