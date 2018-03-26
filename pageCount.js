@@ -1,13 +1,12 @@
-const yargs=require('yargs');
+// const yargs=require('yargs');
 const request=require('request');
 const cheerio=require('cheerio');
 
-
-var pageC=function(url,callback){
+var pageCountFunc=function(url,callback){
 
 	request(url,(err,resp,body)=>{
 		if(err){
-			callback('Some error occurred.');
+			callback('Some error occurred while retrieving submissions page count.');
 		}else{
 			var $=cheerio.load(body);
 
@@ -22,7 +21,5 @@ var pageC=function(url,callback){
 };
 
 module.exports={
-	pageC
+	pageCountFunc
 };
-
-
