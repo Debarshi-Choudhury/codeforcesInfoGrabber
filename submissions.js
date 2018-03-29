@@ -46,9 +46,9 @@ var submissionsFunc=function(usr,cb){
 							}
 							pages=totalpages;
 							pages_available=true;
-							if(pages>26){
-								pages=26;
-								msg='Only Latest 26 submission pages taken';
+							if(pages>28){
+								pages=28;
+								message='Only Latest 28 submission pages taken';
 							}
 						}
 
@@ -101,6 +101,7 @@ var submissionsFunc=function(usr,cb){
 	    // console.log("All Request's have ended");
 		 uniq_ques_solved=Object.keys(uniq_ques_solved);
 		 var submissionsData={
+		 	message,
 	 		uniq_ques_solved,
 	 		no_of_uniq_ques_solved:uniq_ques_solved.length,
 	 		accepted,
