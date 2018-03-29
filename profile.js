@@ -44,7 +44,10 @@ var profileFunc=function(usr,cb){
 			max_rating=parseInt(max_rating);
 
 
-
+			if(user_name.length===0){
+				cb('No such user exists with username '+usr);
+				return;
+			}
 
 			profile={
 				user_name,

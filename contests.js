@@ -84,7 +84,7 @@ var contestsFunc=function(usr,cb){
 				contests.push(contest);
 			});
 			cb(null,contests);
-			//console.log("scraped:\n ",contests);
+			// console.log("scraped:\n ",contests);
 		}else{
 			cb('Could not fetch contest page');
 		}

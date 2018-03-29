@@ -98,7 +98,7 @@ var submissionsFunc=function(usr,cb){
 			 		hacked,
 			 		compilation_error,
 			 	};
-				//console.log(submissionsData);
+				// console.log(submissionsData);
 				cb(null,submissionsData);
 			}
 		}

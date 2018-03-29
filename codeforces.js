@@ -26,16 +26,19 @@ var codeforcesFunc=(usr,cb)=>{
 	profile.profileFunc(usr,(err1,profileData)=>{
 		if(err1){
 			cb(err1);
+			return;
 		}
 		// console.log(profileData);
 		contests.contestsFunc(usr,(err2,contestsData)=>{
 			if(err2){
 				cb(err2);
+				return;
 			}
 			// console.log(contestsData);
 			submissions.submissionsFunc(usr,(err3,submissionsData)=>{
 				if(err3){
 					cb(err3);
+					return;
 				}
 				// console.log(submissionsData);
 				finalObject={
@@ -56,5 +59,9 @@ module.exports={
 
 // //for testing
 // codeforcesFunc('xracer108',(err,body)=>{
-// 	console.log(err,body);
-// })
+// 	if(err){
+// 		console.log(err);
+// 	}else{
+// 		console.log(body);
+// 	}
+// });
