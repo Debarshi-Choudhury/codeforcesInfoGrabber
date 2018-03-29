@@ -10,9 +10,9 @@ var submissionsFunc=function(usr,cb){
 	var verdict;
 	var ques_name;
 	var pos;
-	var uniq_ques={};
+	var uniq_ques_solved={};
 
-	var no_of_uniq_ques;
+	var no_of_uniq_ques_solved;
 	var accepted=0;
 	var wrong_answer=0;
 	var time_lim_exceed=0;
@@ -25,7 +25,7 @@ var submissionsFunc=function(usr,cb){
 		if(error){
 			console.log(error);
 		}else{
-			console.log(pages);
+			// console.log(pages);
 			var page_number= 1;
 			function callNext() {
 			   if (page_number>pages) {
@@ -47,13 +47,13 @@ var submissionsFunc=function(usr,cb){
 										pos=ques_name.search('-');
 										ques_name=ques_name.substring(pos+1).trim();
 
-										uniq_ques[ques_name]=1;
-
 										verdict=verdict.split(' ');
 										verdict=verdict[0].trim();
 
+
 										if(verdict==='Accepted'){
 											accepted++;
+											uniq_ques_solved[ques_name]=1;
 										}else if(verdict==='Wrong'){
 											wrong_answer++;
 										}else if(verdict==='Time'){
@@ -68,8 +68,8 @@ var submissionsFunc=function(usr,cb){
 											hacked++;
 										}
 
-										console.log(ques_name);
-										console.log(verdict);
+										// console.log(ques_name);
+										// console.log(verdict);
 									}
 								});
 							}
@@ -86,10 +86,10 @@ var submissionsFunc=function(usr,cb){
 
 			function requestEnded(){
 			    // console.log("All Request's have ended");
-				 uniq_ques=Object.keys(uniq_ques);
+				 uniq_ques_solved=Object.keys(uniq_ques_solved);
 				 var submissionsData={
-			 		uniq_ques,
-			 		no_of_uniq_ques:uniq_ques.length,
+			 		uniq_ques_solved,
+			 		no_of_uniq_ques_solved:uniq_ques_solved.length,
 			 		accepted,
 			 		wrong_answer,
 			 		time_lim_exceed,

@@ -1,4 +1,4 @@
-const yargs=require('yargs');
+// const yargs=require('yargs');
 const request=require('request');
 const cheerio=require('cheerio');
 
@@ -7,34 +7,54 @@ const contests=require('./contests');
 const submissions=require('./submissions');
 
 
-const argv=yargs
-	.options({
-		username:{
-			demand:true,
-			describe:'codeforces username to fetch data for',
-			alias:'u',
-			string:true
-		}
-	})
-	.help()
-	.alias('help','h')
-	.argv;
+// const argv=yargs
+// 	.options({
+// 		username:{
+// 			demand:true,
+// 			describe:'codeforces username to fetch data for',
+// 			alias:'u',
+// 			string:true
+// 		}
+// 	})
+// 	.help()
+// 	.alias('help','h')
+// 	.argv;
 
-profile.profileFunc(argv.u,(err1,profileData)=>{
-	if(err1){
-		return console.log(err1);
-	}
-	console.log(profileData);
-	contests.contestsFunc(argv.u,(err2,contestsData)=>{
-		if(err2){
-			return console.log(err2);
+var codeforcesFunc=(usr,cb)=>{
+	var finalObject={};
+
+	profile.profileFunc(usr,(err1,profileData)=>{
+		if(err1){
+			cb(err1);
 		}
-		console.log(contestsData);
-		submissions.submissionsFunc(argv.u,(err3,submissionsData)=>{
-			if(err3){
-				return console.log(err3);
+		// console.log(profileData);
+		contests.contestsFunc(usr,(err2,contestsData)=>{
+			if(err2){
+				cb(err2);
 			}
-			console.log(submissionsData);
+			// console.log(contestsData);
+			submissions.submissionsFunc(usr,(err3,submissionsData)=>{
+				if(err3){
+					cb(err3);
+				}
+				// console.log(submissionsData);
+				finalObject={
+					profileData,
+					contestsData,
+					submissionsData
+				};
+				// console.log(JSON.stringify(finalObject,null,2));
+				cb(null,finalObject);
+			});
 		});
 	});
-});
+}
+
+module.exports={
+	codeforcesFunc
+};
+
+// //for testing
+// codeforcesFunc('xracer108',(err,body)=>{
+// 	console.log(err,body);
+// })
