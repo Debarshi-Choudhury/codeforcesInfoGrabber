@@ -46,9 +46,9 @@ var submissionsFunc=function(usr,cb){
 							}
 							pages=totalpages;
 							pages_available=true;
-							if(pages>30){
-								pages=30;
-								msg='Only top 30 submission pages taken';
+							if(pages>26){
+								pages=26;
+								msg='Only Latest 26 submission pages taken';
 							}
 						}
 
