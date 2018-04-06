@@ -42,6 +42,7 @@ var codeforcesFunc=(usr,cb)=>{
 				}
 				// console.log(submissionsData);
 				finalObject={
+					source:'codeforces',
 					profileData,
 					contestsData,
 					submissionsData

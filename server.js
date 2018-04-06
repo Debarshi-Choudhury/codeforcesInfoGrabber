@@ -1,13 +1,37 @@
 const express = require('express');
-const codeforces = require('./codeforces');
+const codeforces = require('./codeforces/codeforces');
+const spoj = require('./spoj/spoj');
+const codechef = require('./codechef/codechef');
 
 var app = express();
 const port = process.env.PORT || 3000;
 
 
-app.get('/',(req,res)=>{
+app.get('/codeforces',(req,res)=>{
 	var usr=req.query.handle;
 	codeforces.codeforcesFunc(usr,(err,data)=>{
+		if(err){
+			res.send({error:err})
+		}else{
+			res.send(data);
+		}
+	});
+});
+
+app.get('/codechef',(req,res)=>{
+	var usr=req.query.handle;
+	codechef.codechefFunc(usr,(err,data)=>{
+		if(err){
+			res.send({error:err})
+		}else{
+			res.send(data);
+		}
+	});
+});
+
+app.get('/spoj',(req,res)=>{
+	var usr=req.query.handle;
+	spoj.spojFunc(usr,(err,data)=>{
 		if(err){
 			res.send({error:err})
 		}else{
