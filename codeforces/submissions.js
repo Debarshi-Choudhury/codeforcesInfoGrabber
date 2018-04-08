@@ -1,9 +1,10 @@
 const request=require('request');
 const cheerio=require('cheerio');
+const pageCount=require('./pageCount');
 
 var submissionsFunc=function(usr,cb){
 
-	var url=`http://codeforces.com/submissions/${usr}`;
+	var url_main=`http://codeforces.com/submissions/${usr}`;
 	var curr_class;
 	var verdict;
 	var ques_name;
@@ -23,80 +24,69 @@ var submissionsFunc=function(usr,cb){
 	var pages=1;
 	var page_number= 1;
 	var pages_available=false;
+	var url;
+	var pages_done=0;
 
-	
-	
-	function callNext() {
-		if (page_number>pages) {
-			requestEnded();
-		}else {
-			page_number++;
-	   	request(`http://codeforces.com/submissions/${usr}/page/${page_number-1}`, function(err,resp,body) {
-					if(err){
-						console.log(`Error while retrieving submission page number ${page_number-1}`);
-					}
-					else{
-						var $=cheerio.load(body);
-
-						if(!pages_available){
-							var totalpages=$('div.pagination ul').children('li').eq(-2).text();
-							totalpages=parseInt(totalpages);
-							if(isNaN(totalpages)){
-								totalpages=1;
-							}
-							pages=totalpages;
-							pages_available=true;
-							if(pages>28){
-								pages=28;
-								message='Only Latest 28 submission pages taken';
-							}
-						}
-
-						$('table.status-frame-datatable tr').each(function(){
-							curr_class=$(this).attr('class');
-							if(curr_class!=='first-row'){
-								verdict=$(this).children('td').eq(5).text().trim();
-								ques_name=$(this).children('td').eq(3).text();
-								pos=ques_name.search('-');
-								ques_name=ques_name.substring(pos+1).trim();
-
-								verdict=verdict.split(' ');
-								verdict=verdict[0].trim();
-
-
-								if(verdict==='Accepted'){
-									accepted++;
-									uniq_ques_solved[ques_name]=1;
-								}else if(verdict==='Wrong'){
-									wrong_answer++;
-								}else if(verdict==='Time'){
-									time_lim_exceed++;
-								}else if(verdict==='Runtime'){
-									runtime_error++;
-								}else if(verdict==='Memory'){
-									mem_lim_exceed++;
-								}else if(verdict==='Compilation'){
-									compilation_error++;
-								}else if(verdict==='Hacked'){
-									hacked++;
-								}
-
-								// console.log(ques_name);
-								// console.log(verdict);
-							}
-						});
-					}
-	            // Call the next request inside the callback, so we are sure that the
-					//next request is ran just after this request has ended
-	            callNext();
-	   	});
+	pageCount.pageCountFunc(url_main,function(er,pg){
+		if(er){
+			return cb(er);
 		}
-	}
+		pages=pg;
+		if(pages>100){
+			pages=100;
+			message='Only Latest 100 submission pages taken';
+		}
+		for(page_number=1;page_number<=pages;page_number++){
+			url=`http://codeforces.com/submissions/${usr}/page/${page_number}`;
+			// console.log(url);
+			request(url,(err,resp,body)=>{
+				if(!err){
+					var $=cheerio.load(body);
 
-	//Here we will call the callNext function for the first time
-	callNext();
+					$('table.status-frame-datatable tr').each(function(){
+						curr_class=$(this).attr('class');
+						if(curr_class!=='first-row'){
+							verdict=$(this).children('td').eq(5).text().trim();
+							ques_name=$(this).children('td').eq(3).text();
+							pos=ques_name.search('-');
+							ques_name=ques_name.substring(pos+1).trim();
 
 
+							verdict=verdict.split(' ');
+							verdict=verdict[0];
+
+							if(verdict==='Accepted'){
+								accepted++;
+								uniq_ques_solved[ques_name]=1;
+							}else if(verdict==='Wrong'){
+								wrong_answer++;
+							}else if(verdict==='Time'){
+								time_lim_exceed++;
+							}else if(verdict==='Runtime'){
+								runtime_error++;
+							}else if(verdict==='Memory'){
+								mem_lim_exceed++;
+							}else if(verdict==='Compilation'){
+								compilation_error++;
+							}else if(verdict==='Hacked'){
+								hacked++;
+							}
+
+							// console.log(ques_name);
+							// console.log(verdict);
+						}
+					});
+				}
+				if(pages_done===pages-1){
+					requestEnded();
+				}else{
+					pages_done++;
+				}
+			});	
+		}
+	});
+	
+	
 	function requestEnded(){
 	    // console.log("All Request's have ended");
 		 uniq_ques_solved=Object.keys(uniq_ques_solved);

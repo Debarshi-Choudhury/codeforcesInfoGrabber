@@ -4,7 +4,7 @@ const cheerio=require('cheerio');
 
 const profile=require('./profile');
 const contests=require('./contests');
-const submissions=require('./submissions');
+const submissions=require('./syncSubmissions');
 
 
 // const argv=yargs
@@ -57,8 +57,6 @@ var codeforcesFunc=(usr,cb)=>{
 module.exports={
 	codeforcesFunc
 };
-
-
 
 // //for testing
 // codeforcesFunc('xracer108',(err,body)=>{
